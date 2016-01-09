@@ -7,15 +7,18 @@ int yylval;
 %}
 
 %%
+[ \t]+
+{EOL}	{toke_count["NEWLINE"]++;cout << "NEWLINE";}
 "+" { toke_count["PLUS"]++;cout << "PLUS" << endl; cout << "yytext" << yytext << endl;} 
 "-" { toke_count["MINUS"]++ ;cout << "MINUS" << endl;cout << "yytext" << yytext << endl;}
 "*" { toke_count["MULTIPLY"]++;cout << "MUL" << endl;}
 "/" { toke_count["DIVISION"]++; cout << "DIV" << endl;}
-[0-9]+ { toke_count["INT_CONST"]++;yylval = atoi(yytext);  cout << "yyval" << yylval << endl;cout << "INT_CONST" << endl;}
-\n  { toke_count["NEWLINE"]++; cout << "NEWLINE";  cout << "yytext" << yytext << endl;}
-[ \t] { /* ignore whitespace */ }
-.   { printf("Mystery character %c\n", *yytext); }
+[_a-zA-Z][_a-zA-Z0-9]{0,30}	{toke_count["IDENTIFIER"]++;cout << yytext << endl;}
+[0-9]+([eE][-+]?[0-9]+)	{toke_count["FLOAT_NUM"]++; cout << "FLOAT_NUM" <<endl;}
+[0-9]+|[0-9]*	{toke_count["INT_NUM"]++; cout << "INT_NUM" << endl;}
 %%
+
+
 
 main(int argc, char **argv)
 {
