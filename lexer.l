@@ -2,37 +2,24 @@
 #include <iostream>
 #include <map>
 using namespace std;
-map<int,int> toke_count;
-enum yytokentype {
-NUMBER = 258,
-ADD = 259,
-SUB = 260,
-MUL = 261,
-DIV = 262,
-ABS = 263,
-EOL = 264,
-};
+map<string,int> toke_count;
 int yylval;
-int tok;
 %}
 
 %%
-"+" { toke_count[tok]++;cout << yytext;return ADD; } 
-"-" { toke_count[tok]++;return SUB; }
-"*" { toke_count[tok]++;return MUL; }
-"/" { toke_count[tok]++;return DIV; }
-"|" { toke_count[tok]++;return ABS; }
-[0-9]+ { toke_count[tok]++;yylval = atoi(yytext); return NUMBER; }
-\n  { toke_count[tok]++;return EOL; }
+"+" { toke_count["PLUS"]++;cout << "PLUS" << endl; cout << "yytext" << yytext << endl;} 
+"-" { toke_count["MINUS"]++ ;cout << "MINUS" << endl;cout << "yytext" << yytext << endl;}
+"*" { toke_count["MULTIPLY"]++;cout << "MUL" << endl;}
+"/" { toke_count["DIVISION"]++; cout << "DIV" << endl;}
+[0-9]+ { toke_count["INT_CONST"]++;yylval = atoi(yytext);  cout << "yyval" << yylval << endl;cout << "INT_CONST" << endl;}
+\n  { toke_count["NEWLINE"]++; cout << "NEWLINE";  cout << "yytext" << yytext << endl;}
 [ \t] { /* ignore whitespace */ }
 .   { printf("Mystery character %c\n", *yytext); }
 %%
 
-
 main(int argc, char **argv)
 {
-while(tok = yylex()) 
-{
-    cout << "token " << tok << "count is" << toke_count[tok] << endl;
-}
+	yylex();
+    cout << "lexeme is" << toke_count["NUM"] << endl;
+    cout << "no of newline" << toke_count["NEWLINE"] << endl;
 }
